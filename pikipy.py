@@ -1,17 +1,17 @@
 #!/usr/bin/python3
 # -*- Coding:Utf-8 -*-
 
-##########################################
-#	     		- Pikipy -				 #
-#										 #
-#	An opensource python based games 	 #
-#	plateform with community developped  #
-#	games. 								 #
-#										 #
-#	This is the main script to run !	 #
-#	Have fun !							 #
-#										 #
-##########################################
+######################################################
+#		- Pikipy -				 
+#										 
+#	An opensource python based games 	 
+#	plateform with community developped  
+#	games. 								 
+#										 
+#	This is the main script to run !	 
+#	Have fun !							 
+#										 
+######################################################
 
 
 import tkinter as tk
