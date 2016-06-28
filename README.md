@@ -9,5 +9,5 @@ The project has just begun, and it's one of my first github repositry so please 
 ## Installation
 1. Download sources
 2. Go to directory by command using terminal `cd ~/Desktop/<Directory>`
-3. Be sure you have installed following modules for Python3 : tkinter, pygames
+3. Be sure you have installed following modules for Python3 : tkinter, pygames, pillow
 4. Run the main script `python3 pikipy.pyw`
