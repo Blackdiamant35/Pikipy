@@ -64,7 +64,7 @@ class PseudoForm(tk.Tk):
 		"Called when user closes window"
 		sys.exit('Closed app : pikipy')
 
-	# Player Createion function
+	# Player Creation function
 	def post(self, event=None): # event=None to work with the self.name.bind method that gives an object as arg
 		name = self.name.get()
 		global user
