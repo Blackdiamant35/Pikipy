@@ -1,21 +1,26 @@
 #!/usr/bin/python3
 # -*- Coding:Utf-8 -*-
 
-##########################################
-#	     		- Pikipy -				 #
-#										 #
-#	An opensource python based games 	 #
-#	plateform with community developped  #
-#	games. 								 #
-#										 #
-#	This is the main script to run !	 #
-#	Have fun !							 #
-#										 #
-##########################################
+######################################################
+#		- Pikipy -				 
+#										 
+#	An opensource python based games 	 
+#	plateform with community developped  
+#	games. 								 
+#										 
+#	This is the main script to run !	 
+#	Have fun !							 
+#										 
+######################################################
 
 
 import tkinter as tk
-import mainmenu
+from mainmenu import *
+import sys
+
+# Games 
+sys.path.append('games/snake')
+import snake
 
 # Creates a player
 class Player(object):
@@ -41,16 +46,27 @@ class PseudoForm(tk.Tk):
 	def __init__(self): 
 		tk.Tk.__init__(self)
 
-		tk.Label(self, text='Enter a name :', anchor='center').grid(row=0)
+		# Text label
+		tk.Label(self, text='Enter a name :').grid(row=0,sticky='s')
 
+		# Text entry
 		self.name = tk.Entry(self, width=16)
 		self.name.bind("<Return>", self.post)
-		self.name.grid(row=1)
+		self.name.grid(row=1,padx=20,pady=20)
 
-		self.button = tk.Button(self, text='Enter', command=self.post)
+		# Confirmation button
+		self.button = tk.Button(self, text='Enter',command=self.post)
 		self.button.grid(row=2)
 
+		# Window settings
+		self.wm_title('Pikipy')
+		self.resizable(width=False, height=False)
+		self.protocol("WM_DELETE_WINDOW", self.close)
 		self.mainloop()
+
+	def close(self):
+		"Called when user closes window"
+		sys.exit('Closed app : pikipy')
 
 	# Player Createion function
 	def post(self, event=None): # event=None to work with the self.name.bind method that gives an object as arg
@@ -60,5 +76,14 @@ class PseudoForm(tk.Tk):
 		print("Added user, name : "+user.getName())
 		self.destroy()
 
-form = PseudoForm()
-fen = mainmenu.MenuWindow()
+# Main program loop
+if __name__ == '__main__':
+	form = PseudoForm()
+	while True:
+
+		game = runMenu(user)
+
+		if game == 'snake':
+			print(snake.run())
+		elif game == 'pong':
+			print('Game not ready to be played sry !')
