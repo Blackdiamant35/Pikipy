@@ -47,7 +47,7 @@ class MenuSound(object):
 class Background(object):
 	"Background layer control"
 
-	def __init__(self,file='bg1.gif'):
+	def __init__(self,file='bg.gif'):
 		self.image = pygame.image.load(file)
 
 	def blit(self,window):
@@ -123,7 +123,7 @@ def runMenu(user):
 	sound = MenuSound()
 
 	# Insert background
-	bg = Background(file='bg1.gif')
+	bg = Background(file='bg.gif')
 	title = Title()
 	text = Text(x=20,y=420,text='Welcome, '+user.getName(),size=36)
 	legend = Text(x=3,y=460,text='The program is in alpha phase, please report bugs @ github.com/Blackdiamant35/Pikipy',size=22,color=(155,155,155))
