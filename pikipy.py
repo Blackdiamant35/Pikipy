@@ -15,7 +15,7 @@
 
 
 import tkinter as tk
-import mainmenu
+from mainmenu import *
 import sys
 
 # Creates a player
@@ -64,7 +64,7 @@ class PseudoForm(tk.Tk):
 		"Called when user closes window"
 		sys.exit('Closed app : pikipy')
 
-	# Player Creation function
+	# Player Createion function
 	def post(self, event=None): # event=None to work with the self.name.bind method that gives an object as arg
 		name = self.name.get()
 		global user
@@ -73,4 +73,4 @@ class PseudoForm(tk.Tk):
 		self.destroy()
 
 form = PseudoForm()
-fen = mainmenu.MenuWindow()
+runMenu()
