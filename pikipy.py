@@ -18,13 +18,10 @@ import tkinter as tk
 from mainmenu import *
 import sys
 
-<<<<<<< HEAD
 # Games 
 sys.path.append('games/snake')
 import snake
 
-=======
->>>>>>> fddd860216c8967b85c8f6ddfa4c882cc94361b6
 # Creates a player
 class Player(object):
 	"Informations about user"
@@ -79,7 +76,6 @@ class PseudoForm(tk.Tk):
 		print("Added user, name : "+user.getName())
 		self.destroy()
 
-<<<<<<< HEAD
 # Main program loop
 if __name__ == '__main__':
 	form = PseudoForm()
@@ -91,7 +87,3 @@ if __name__ == '__main__':
 			print(snake.run())
 		elif game == 'pong':
 			print('Game not ready to be played sry !')
-=======
-form = PseudoForm()
-runMenu()
->>>>>>> fddd860216c8967b85c8f6ddfa4c882cc94361b6
