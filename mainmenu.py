@@ -34,7 +34,7 @@ class MenuSound(object):
 		self.state = True
 		pygame.mixer.music.play(loops=-1)
 		pygame.mixer.music.set_volume(0.3)
-		print('Sound playd.')
+		print('Sound played.')
 
 		# Change speaker image
 		soundbutton.setFile('sound_on.png', 'sound_on.png')

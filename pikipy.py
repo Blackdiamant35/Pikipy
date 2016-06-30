@@ -21,6 +21,8 @@ import sys
 # Games 
 sys.path.append('games/snake')
 import snake
+sys.path.append('games/pong')
+import pong
 
 # Creates a player
 class Player(object):
@@ -84,5 +86,5 @@ if __name__ == '__main__':
 		if game == 'snake':
 			print(snake.run())
 		elif game == 'pong':
-			print('Game not ready to be played sry !')
+			print(pong.run())
 		game = runMenu(user,True)
