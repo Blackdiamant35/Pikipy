@@ -17,10 +17,8 @@ class MenuSound(object):
 	"Basic sound system"
 
 	def __init__(self):
-		self.state = True
+		self.state = False
 		pygame.mixer.music.load('menu.mp3')
-		pygame.mixer.music.play(loops=-1)
-		pygame.mixer.music.set_volume(0.3)
 
 	def stop(self,soundbutton):
 		# Mute sound
@@ -31,12 +29,12 @@ class MenuSound(object):
 		# Change speaker image
 		soundbutton.setFile('sound_off.png', 'sound_off.png')
 
-	def resume(self,soundbutton):
+	def play(self,soundbutton):
 		# Start sound
 		self.state = True
 		pygame.mixer.music.play(loops=-1)
 		pygame.mixer.music.set_volume(0.3)
-		print('Sound resumed.')
+		print('Sound playd.')
 
 		# Change speaker image
 		soundbutton.setFile('sound_on.png', 'sound_on.png')
@@ -94,6 +92,7 @@ class GameButton(object):
 		self.button_hover = pygame.image.load(self.hover).convert_alpha()
 		self.rect = pygame.Rect(self.x, self.y, self.button.get_size()[0], self.button.get_size()[1])
 
+
 class Text(object):
 	"Basic text"
 
@@ -117,33 +116,34 @@ class MenuWindow(object):
 		self.root = pygame.display.set_mode((640, 480))
 
 
-def runMenu(user):
+def runMenu(user, alreadyExists=False):
 	# Create window & sound object
 	window = MenuWindow()
-	sound = MenuSound()
-
 	# Insert background
 	bg = Background(file='bg.gif')
 	title = Title()
 	text = Text(x=20,y=420,text='Welcome, '+user.getName(),size=36)
 	legend = Text(x=3,y=460,text='The program is in alpha phase, please report bugs @ github.com/Blackdiamant35/Pikipy',size=22,color=(155,155,155))
 
-	##### BUTTONS CONFIGURATION #####
+	if alreadyExists == False:
+		global soundbutton # Necessarry to access this object after.
+		##### BUTTONS CONFIGURATION #####
 
-	leaderboardsbutton = GameButton(file='score_off.png', hover='score_on.png', x=520, y=292, action='leaderboards')
-	soundbutton = GameButton(file='sound_on.png', hover='sound_on.png', x=575, y=5, action='sound')
-	settingsbutton = GameButton(file='settings.png', hover='settings.png', x=610, y=5, action='settings')
-	snakebutton = GameButton(file='button_snake.png', hover='button_snake_hovered.png', x=20, y=50, action='snake')
-	pongbutton = GameButton(file='button_pong.png', hover='button_pong_hovered.png', x=20, y=130, action='pong')
+		leaderboardsbutton = GameButton(file='score_off.png', hover='score_on.png', x=520, y=292, action='leaderboards')
+		soundbutton = GameButton(file='sound_on.png', hover='sound_on.png', x=575, y=5, action='sound')
+		settingsbutton = GameButton(file='settings.png', hover='settings.png', x=610, y=5, action='settings')
+		snakebutton = GameButton(file='button_snake.png', hover='button_snake_hovered.png', x=20, y=50, action='snake')
+		pongbutton = GameButton(file='button_pong.png', hover='button_pong_hovered.png', x=20, y=130, action='pong')
 
-	##### END BUTTONS CONFIGURATION #####
+		##### END BUTTONS CONFIGURATION #####
 
 	# Window state
 	active = True
+	sound = MenuSound()
+	sound.play(soundbutton)
 
 	# Image update function
 	def calculate():
-		window.root.fill((255,255,255,0))
 		bg.blit(window)
 		title.blit(window)
 		legend.blit(window)
@@ -176,14 +176,16 @@ def runMenu(user):
 								if sound.getState() == True:
 									sound.stop(soundbutton)
 								else:
-									sound.resume(soundbutton)
+									sound.play(soundbutton)
 							elif button.getAction() == 'settings':
 								print('Setting menu not aviable in this update, try later.')
 							else:
-								print('ran program: '+button.getAction())
-								sound.stop(soundbutton)
+								game = button.getAction()
+								print('ran program: '+game)
+								# Stopping sound
+								# sound.stop(soundbutton)				
 								pygame.quit()
-								return button.getAction()
+								return game
 								break
 
 		calculate()

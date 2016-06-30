@@ -79,11 +79,10 @@ class PseudoForm(tk.Tk):
 # Main program loop
 if __name__ == '__main__':
 	form = PseudoForm()
+	game = runMenu(user,False)
 	while True:
-
-		game = runMenu(user)
-
 		if game == 'snake':
 			print(snake.run())
 		elif game == 'pong':
 			print('Game not ready to be played sry !')
+		game = runMenu(user,True)
