@@ -5,20 +5,9 @@ from pygame.locals import *
 import time
 import math
 import sys
-import os
+from pikiclasses import *
 
 version = 'v0.1'
-
-class Text(object):
-	"Basic text"
-
-	def __init__(self, x=0, y=0, text='Default text', size=36, color=(255, 236, 222)):
-		self.x, self.y, self.text, self.size, self.color = x, y, text, size, color
-		self.font = pygame.font.Font('cinnabar.ttf', size)
-		self.content = self.font.render(self.text, 1, self.color)
-
-	def blit(self,window):
-		window.root.blit(self.content, (self.x, self.y))
 
 class GameWindow(object):
 	"Game window object"
@@ -30,15 +19,6 @@ class GameWindow(object):
 		pygame.key.set_repeat(1, 10)
 		pygame.display.set_caption("Pong "+version, "")
 		self.root = pygame.display.set_mode((800, 600))
-
-class Background(object):
-	"Background layer control"
-
-	def __init__(self,file='court.png'):
-		self.image = pygame.image.load(file)
-
-	def blit(self,window):
-		window.root.blit(self.image, (0,0))
 
 class Paddle(object):
 	"Simple paddle"
@@ -61,12 +41,12 @@ class Paddle(object):
 class Ball(object):
 	"Textured ball dynamic vector object"
 
-	def __init__(self, file='ball.png'):
+	def __init__(self, file='games/pong/ball.png'):
 		# Vector components
 		self.x = 400.0       # x coordinate
 		self.y = 300.0       # y coordinate
 		self.direction = 45   # Polar direction, starting from right to bottom, in degrees
-		self.speed = 10       # Speed, in pixel per tick
+		self.speed = 15       # Speed, in pixel per tick
 
 		# Loading the file surface
 		self.file = file
@@ -114,60 +94,77 @@ class Ball(object):
 		self.x = 400.0
 		self.y = 300.0
 
-def run():
-
+def menu(window=window):
 	# Calculate Frame fonction
 	def calculate():
-		court.blit(window)
-		paddle_left.blit(window)
-		paddle_right.blit(window)
-		ball.blit(window)
-		score_left.blit(window)
-		score_right.blit(window)
-		pygame.display.update(paddle_right.rect)
+		court.blit(window)œ
+		solobutton.blit(window)
 		pygame.display.flip()
 
-	global left, right
-	left = 0
-	right = 0
-	window = GameWindow()
-	court = Background()
-	score_left = Text(text=str(left), x=335, y=40, size=60)
-	score_right = Text(text=str(right), x=425, y=40, size=60)
-	paddle_left = Paddle(x=15,y=230,file='paddle_blue.png')
-	paddle_right = Paddle(x=753,y=230,file='paddle_green.png')
-	ball = Ball()
+	court = Background(file='games/pong/court.png')
+	solobutton = GameButton(file='games/pong/paddle_grey.png', hover='games/pong/paddle_blue.png', x=520, y=292, action='leaderboards')
+
 
 	while True:
-		# Framerate calculator
-		timer = pygame.time.get_ticks()
-
-		ball.move(paddle_left, paddle_right)
 		for event in pygame.event.get():
-			# On close
-			if event.type == QUIT:
-				sys.exit('Closed app : pikipy')
-			if event.type == KEYDOWN:
-				keys = pygame.key.get_pressed()
-				if keys[K_UP]:
-					paddle_right.ascend(-15)
-				if keys[K_DOWN]:
-					paddle_right.ascend(15)
-				if keys[K_z]:
-					paddle_left.ascend(-15)
-				if keys[K_s]:
-					paddle_left.ascend(15)
+			# On mouse motion
+			if event.type == MOUSEMOTION:
+				for button in buttons:
+					if button.rect.collidepoint(pygame.mouse.get_pos()):
+						button.setHovered()
+					else:
+						button.setHovered(False)
 		calculate()
 
-		# Framerate calculator wait for CPU optimitzation
-		timeover = pygame.time.get_ticks()-timer
-		towait = 14-timeover # Miliseconds to wait before beeing synchronized with 60 fps
-		if towait < 0: towait = 0
-		time.sleep(towait/1000)
-		os.system('clear')
-		print('fps:  '+ str(round(1/((pygame.time.get_ticks()-timer)/1000),1 )))
-		print('wait: '+str(towait))
 
+def run():
+	while True:
+		window = GameWindow()
+		menu()
+		# Calculate Frame fonction
+		def calculate():
+			court.blit(window)
+			paddle_left.blit(window)
+			paddle_right.blit(window)
+			ball.blit(window)
+			score_left.blit(window)
+			score_right.blit(window)
+			pygame.display.flip()
 
-if __name__ == '__main__':
-	run()
+		global left, right
+		left = 0
+		right = 0
+		court = Background(file='games/pong/court.png')
+		score_left = Text(text=str(left), x=335, y=40, size=60, font='games/pong/cinnabar.ttf')
+		score_right = Text(text=str(right), x=425, y=40, size=60, font='games/pong/cinnabar.ttf')
+		paddle_left = Paddle(x=15,y=230,file='games/pong/paddle_blue.png')
+		paddle_right = Paddle(x=753,y=230,file='games/pong/paddle_green.png')
+		ball = Ball()
+
+		while True:
+			# Framerate calculator
+			timer = pygame.time.get_ticks()
+
+			ball.move(paddle_left, paddle_right)
+			for event in pygame.event.get():
+				# On close
+				if event.type == QUIT:
+					return 0
+				if event.type == KEYDOWN:
+					keys = pygame.key.get_pressed()
+					if keys[K_UP]:
+						paddle_right.ascend(-15)
+					if keys[K_DOWN]:
+						paddle_right.ascend(15)
+					if keys[K_z]:
+						paddle_left.ascend(-15)
+					if keys[K_s]:
+						paddle_left.ascend(15)
+			calculate()
+
+			# Framerate calculator wait for CPU optimitzation
+			timeover = pygame.time.get_ticks()-timer
+			towait = 14-timeover # Miliseconds to wait before beeing synchronized with 60 fps
+			if towait > 0: 
+				time.sleep(towait/1000)
+
