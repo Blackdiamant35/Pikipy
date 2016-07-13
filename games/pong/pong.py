@@ -38,6 +38,9 @@ class Paddle(object):
 			self.y += var
 			self.rect.move_ip(0, var)
 
+	def getY(self):
+		return self.y
+
 class Ball(object):
 	"Textured ball dynamic vector object"
 
@@ -46,16 +49,16 @@ class Ball(object):
 		self.x = 400.0       # x coordinate
 		self.y = 300.0       # y coordinate
 		self.direction = 45   # Polar direction, starting from right to bottom, in degrees
-		self.speed = 15       # Speed, in pixel per tick
+		self.speed = 5       # Speed, in pixel per tick
 
 		# Loading the file surface
 		self.file = file
 		self.surface = pygame.image.load(self.file).convert_alpha()
 
-		# Collision box shape
-		self.rect = pygame.Rect(self.x, self.y, self.surface.get_size()[0], self.surface.get_size()[1])
+		# Out of the game
+		self.out = False
 
-	def blit(self, window):
+	def blit(self, window): # Pygame image rendering
 		window.root.blit(self.surface, (self.x, self.y))
 
 	def move(self,paddleleft,paddleright):
@@ -68,31 +71,42 @@ class Ball(object):
 		if (self.y < 0 or self.y > 568):
 			self.direction = -self.direction
 
-		# paddle collision
-		self.rect = pygame.Rect(self.x, self.y, self.surface.get_size()[0], self.surface.get_size()[1])
-		if paddleleft.rect.colliderect(self.rect):
-			if self.direction >= 0: 
-				self.direction = 180-self.direction
-			if self.direction <= 0: 
-				self.direction = -180-self.direction
-		if paddleright.rect.collidepoint(self.x, self.y):
-			if self.direction >= 0: 
-				self.direction = 180-self.direction
-			if self.direction <= 0: 
-				self.direction = -180-self.direction
+		# Right paddle collision
+		if self.out == False:
+			if self.x >= 753:
+				if ( self.y > paddleright.getY() and self.y < paddleright.getY()+128 ):
+					if self.direction >= 0: 
+						self.direction = 180-self.direction
+					if self.direction <= 0: 
+						self.direction = -180-self.direction
+				else:
+					self.out = True
+
+			# Left paddle collision
+			if self.x <= 47:
+				if ( self.y > paddleleft.getY() and self.y < paddleleft.getY()+128 ):
+					if self.direction >= 0: 
+						self.direction = 180-self.direction
+					if self.direction <= 0: 
+						self.direction = -180-self.direction
+				else:
+					self.out = True
 
 		global left, right
-		# Out of game
-		if self.x > 800:
-			self.reset()
-			left += 1
-		if self.x < 0:
-			self.reset()
-			right += 1
+
+		# If the ball is out of the game, reset.
+		if self.out == True:
+			if self.x > 800:
+				self.reset()
+				left += 1
+			if self.x < 0:
+				self.reset()
+				right += 1
 
 	def reset(self):
 		self.x = 400.0
 		self.y = 300.0
+		self.out = False
 
 def menu(window):
 	# Calculate Frame fonction
