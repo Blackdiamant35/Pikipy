@@ -94,10 +94,10 @@ class Ball(object):
 		self.x = 400.0
 		self.y = 300.0
 
-def menu(window=window):
+def menu(window):
 	# Calculate Frame fonction
 	def calculate():
-		court.blit(window)œ
+		court.blit(window)
 		solobutton.blit(window)
 		pygame.display.flip()
 
@@ -108,6 +108,8 @@ def menu(window=window):
 	while True:
 		for event in pygame.event.get():
 			# On mouse motion
+			if event.type == QUIT:
+				return(0)
 			if event.type == MOUSEMOTION:
 				for button in buttons:
 					if button.rect.collidepoint(pygame.mouse.get_pos()):
@@ -120,7 +122,7 @@ def menu(window=window):
 def run():
 	while True:
 		window = GameWindow()
-		menu()
+		menu(window)
 		# Calculate Frame fonction
 		def calculate():
 			court.blit(window)
